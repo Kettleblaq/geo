@@ -24,6 +24,7 @@ class NearestNeighborIndexTest(unittest.TestCase):
         ]
 
         uut = NearestNeighborIndex(test_points)
+        uut.index_points()
 
         self.assertEqual((1, 0), uut.find_nearest((0, 0)))
         self.assertEqual((-1000, 20), uut.find_nearest((-2000, 0)))
@@ -55,6 +56,7 @@ class NearestNeighborIndexTest(unittest.TestCase):
 
         # Run the indexed tests
         start = time.time()
+        uut.index_points()
         for query_point in query_points:
             actual.append(uut.find_nearest(query_point))
         new_time = time.time() - start
