@@ -24,8 +24,6 @@ class NearestNeighborIndexTest(unittest.TestCase):
         ]
 
         uut = NearestNeighborIndex(test_points)
-        uut.index_points()
-
         self.assertEqual((1, 0), uut.find_nearest((0, 0)))
         self.assertEqual((-1000, 20), uut.find_nearest((-2000, 0)))
         self.assertEqual((42, 3.14159), uut.find_nearest((40, 3)))
@@ -56,7 +54,8 @@ class NearestNeighborIndexTest(unittest.TestCase):
 
         # Run the indexed tests
         start = time.time()
-        uut.index_points()
+        # account for sorting time in benchmark
+        uut.sort_points()
         for query_point in query_points:
             actual.append(uut.find_nearest(query_point))
         new_time = time.time() - start
@@ -66,3 +65,31 @@ class NearestNeighborIndexTest(unittest.TestCase):
         print(f"speedup: {(slow_time / new_time):0.2f}x")
 
     # TODO: Add more test cases to ensure your index works in different scenarios
+    def test_duplicate(self):
+        """
+        test_duplicate tests arrays with duplicate agruments.
+        """
+        test_points = [
+            (1, 2),
+            (1, 0),
+            (10, 5),
+            (-1000, 20),
+            (3.14159, 42),
+            (42, 3.14159),
+        ]
+
+        test_points += test_points
+        uut = NearestNeighborIndex(test_points)
+        self.assertEqual((1, 0), uut.find_nearest((0, 0)))
+        self.assertEqual((-1000, 20), uut.find_nearest((-2000, 0)))
+        self.assertEqual((42, 3.14159), uut.find_nearest((40, 3)))
+
+    def test_empty(self):
+        """
+        test_empty tests for an empty array agrument.
+        """
+        test_points = []
+        uut = NearestNeighborIndex(test_points)
+        # sort the array on the x-axis and y-axis
+        self.assertEqual(None, uut.find_nearest((0, 0)))
+
