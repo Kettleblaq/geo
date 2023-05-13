@@ -3,15 +3,8 @@ import math
 
 class NearestNeighborIndex:
     """
-    This script finds the Nearest Neighbor  for a set of points in a 2D plane. 
-    
-    The script takes a list of (x, y) coordinates representing the spatial points as input and computes the NNI using the observed mean nearest neighbor distance and the expected mean nearest neighbor distance.
-
-    Usage: python nni.py input.txt
-
-    The input file should contain one (x, y) coordinate pair per line, separated by a space.
+    Finds the Nearest Neighbor Index for a point using set of points in a 2D plane. 
     """
-    # code implementation goes here...
 
     def __init__(self, points):
         """
@@ -104,5 +97,4 @@ class NearestNeighborIndex:
         TODO comment me.
         """
 
-        # TODO implement me so this class runs much faster.
         return self.find_nearest_fast(query_point)

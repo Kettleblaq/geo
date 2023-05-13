@@ -13,7 +13,6 @@ class NearestNeighborIndexTest(unittest.TestCase):
         test_basic tests a handful of nearest neighbor queries to make sure they return the right
         result.
         """
-
         test_points = [
             (1, 2),
             (1, 0),
