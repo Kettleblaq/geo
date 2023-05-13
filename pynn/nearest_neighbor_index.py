@@ -42,11 +42,12 @@ class NearestNeighborIndex:
 
     def calculate_estimate(self, points, axis, query_point):
         """
-        returns the two closest points based on the x or y axis
+        Returns the two closest points based on the x or y axis
         """
-
         low = 0
         high = len(points) - 1
+    
+        # Binary search to find the closest points
         while low <= high:
             mid = (low + high) // 2
             if points[mid][axis] == query_point[axis]:
@@ -55,6 +56,8 @@ class NearestNeighborIndex:
                 low = mid + 1
             else:
                 high = mid - 1
+    
+        # Handle edge cases
         if high < 0:
             return low, low+1
         elif low >= len(points):
@@ -63,10 +66,18 @@ class NearestNeighborIndex:
             return low, low+1
         else:
             return high-1, high
-
-    def find_nearest_fast(self, query_point):
+        
+    def calculate_distance(self, point, query_point):
         """
-        find_nearest_fast returns the point that is closest to query_point. If there are no indexed
+        Calculates the distance between two points.
+        """
+        deltax = point[0] - query_point[0]
+        deltay = point[1] - query_point[1]
+        return math.sqrt(deltax * deltax + deltay * deltay)
+
+    def find_nearest(self, query_point):
+        """
+        Returns the point that is closest to query_point. If there are no indexed
         points, None is returned.
         """
         x_sort = self.points_x_sort
@@ -76,25 +87,21 @@ class NearestNeighborIndex:
         x_close = self.calculate_estimate(x_sort, 0, query_point)
         y_close = self.calculate_estimate(y_sort, 1, query_point)
 
-        # combine the closest points on the x and y axis 
-        closest_points = x_sort[x_close[0]:x_close[1]] + y_sort[y_close[0]:y_close[1]]
+        # combine the closest points on the x and y axis
+        closest_points = []
+        if self.points != None and len(self.points) > 0:
+            for index in range(1):
+                closest_points.append(x_sort[x_close[index]])
+                closest_points.append(y_sort[y_close[index]])
+        
 
         min_dist = None
         min_point = None
 
         for point in closest_points:
-            deltax = point[0] - query_point[0]
-            deltay = point[1] - query_point[1]
-            dist = math.sqrt(deltax * deltax + deltay * deltay)
+            dist = self.calculate_distance(point, query_point)
             if min_dist is None or dist < min_dist:
                 min_dist = dist
                 min_point = point
 
         return min_point
-
-    def find_nearest(self, query_point):
-        """
-        TODO comment me.
-        """
-
-        return self.find_nearest_fast(query_point)

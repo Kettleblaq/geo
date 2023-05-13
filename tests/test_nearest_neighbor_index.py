@@ -63,7 +63,6 @@ class NearestNeighborIndexTest(unittest.TestCase):
         print(f"new time: {new_time:0.2f}sec")
         print(f"speedup: {(slow_time / new_time):0.2f}x")
 
-    # TODO: Add more test cases to ensure your index works in different scenarios
     def test_duplicate(self):
         """
         test_duplicate tests arrays with duplicate agruments.
@@ -91,4 +90,21 @@ class NearestNeighborIndexTest(unittest.TestCase):
         uut = NearestNeighborIndex(test_points)
         # sort the array on the x-axis and y-axis
         self.assertEqual(None, uut.find_nearest((0, 0)))
+
+    def test_same(self):
+        """
+        test_same tests an array that contain the query point
+        """
+        test_points = [
+            (1, 2),
+            (1, 0),
+            (10, 5),
+            (-1000, 20),
+            (3.14159, 42),
+            (42, 3.14159),
+        ]
+
+        uut = NearestNeighborIndex(test_points)
+        # sort the array on the x-axis and y-axis
+        self.assertEqual((1, 2), uut.find_nearest((1, 2)))
 
